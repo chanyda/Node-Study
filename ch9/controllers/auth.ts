@@ -71,6 +71,11 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
 
 export const logout = (req: Request, res: Response, next: NextFunction) => {
     try {
+        // 세션 쿠키를 없애줌.
+        // 브라우저에는 쿠키가 남아있지만, 서버 쪽에는 세션 쿠키(세션개체)가 없어서 로그인이 안됨
+        req.logout(() => {
+            res.redirect("/");
+        });
     } catch (err: any) {
         console.error(err);
         next(err);

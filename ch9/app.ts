@@ -35,7 +35,7 @@ app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser(process.env.COOKIE_SECRET));
+app.use(cookieParser(process.env.COOKIE_SECRET)); // 3. {connect.sid: 세션쿠키} 객체를 생성해준다.
 app.use(
     session({
         resave: false,
@@ -48,7 +48,7 @@ app.use(
     })
 );
 app.use(passport.initialize()); // req.user, req.login, req.isAuthenticate, req.logout이 여기서 생성됨
-app.use(passport.session()); // connect.sid라는 이름의 세션 쿠키가 브라우저로 전송
+app.use(passport.session()); // 2. connect.sid라는 이름의 세션 쿠키가 브라우저로 전송 (브라우저 connect.sid=세션쿠키)
 
 app.use((req: Request, res: Response, next: NextFunction) => {
     res.locals.user = null;
