@@ -9,13 +9,13 @@ import pageRouter from "./routes/page";
 import authRouter from "./routes/auth";
 import db from "./models";
 import passport from "passport";
-// import passportConfig from "./passport";
+import { passportConfig } from "./passport";
 
 dotenv.config();
 
 const app = express();
 
-// passportConfig();
+passportConfig();
 
 app.set("PORT", process.env.PORT || 8001);
 app.set("view engine", "html");
@@ -23,7 +23,7 @@ nunjucks.configure("views", { express: app, watch: true });
 
 // DB 연결
 db.sequelize
-    .sync({ force: true })
+    .sync({ force: false })
     .then(() => {
         console.log("DB CONNECT");
     })
@@ -51,7 +51,7 @@ app.use(passport.initialize()); // req.user, req.login, req.isAuthenticate, req.
 app.use(passport.session()); // 2. connect.sid라는 이름의 세션 쿠키가 브라우저로 전송 (브라우저 connect.sid=세션쿠키)
 
 app.use((req: Request, res: Response, next: NextFunction) => {
-    res.locals.user = null;
+    res.locals.user = req.user;
     res.locals.followerCount = 0;
     res.locals.followingCount = 0;
     res.locals.followingIdList = [];

@@ -45,28 +45,33 @@ export const join = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 export const login = (req: Request, res: Response, next: NextFunction) => {
-    console.log("Login Controller");
-    passport.authenticate("local", (authError: any, user: User, info: any) => {
-        // 만일 서버오류가 발생한 경우
-        if (authError) {
-            console.error(authError);
-            return next(authError);
-        }
-
-        // user가 존재하지 않는 경우 -> 로직 오류
-        if (!user) {
-            return res.redirect(`/?loginError=${info.message}`);
-        }
-
-        // 로그인 성공
-        return req.login(user, (err: any) => {
-            if (err) {
-                console.error(err);
-                return next(err);
+    try {
+        console.log("Login Controller");
+        passport.authenticate("local", (authError: any, user: User, info: any) => {
+            // 만일 서버오류가 발생한 경우
+            if (authError) {
+                console.error(authError);
+                return next(authError);
             }
-            return res.redirect("/");
-        });
-    });
+
+            // user가 존재하지 않는 경우 -> 로직 오류
+            if (!user) {
+                return res.redirect(`/?loginError=${info.message}`);
+            }
+
+            // 로그인 성공
+            return req.login(user, (err: any) => {
+                if (err) {
+                    console.error(err);
+                    return next(err);
+                }
+                return res.redirect("/");
+            });
+        })(req, res, next); // 미들웨어이므로, (req, res, next) 붙여야함.
+    } catch (err: any) {
+        console.error(err);
+        next(err);
+    }
 };
 
 export const logout = (req: Request, res: Response, next: NextFunction) => {

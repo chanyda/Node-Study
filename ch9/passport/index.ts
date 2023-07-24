@@ -1,7 +1,8 @@
 import passport from "passport";
 import User from "../models/user";
+import { local } from "./localStrategy";
 
-exports = () => {
+export const passportConfig = () => {
     console.log("passport index.ts");
     // 로그인 시  실행 -> req.session 객체에 어떤 데이터를 저장할지 정하는 메소드
     passport.serializeUser((user, done) => {
@@ -28,4 +29,6 @@ exports = () => {
             done(err);
         }
     });
+
+    local();
 };
