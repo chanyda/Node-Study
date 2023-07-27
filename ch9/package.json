@@ -33,6 +33,7 @@
         "@types/morgan": "^1.9.4",
         "@types/nunjucks": "^3.2.3",
         "@types/passport": "^1.0.12",
+        "@types/passport-kakao": "^1.0.0",
         "@types/passport-local": "^1.0.35"
     }
 }

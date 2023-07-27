@@ -1,6 +1,7 @@
 import passport from "passport";
 import User from "../models/user";
 import { local } from "./localStrategy";
+import { kakao } from "./kakaoStrategy";
 
 export const passportConfig = () => {
     console.log("passport index.ts");
@@ -31,4 +32,5 @@ export const passportConfig = () => {
     });
 
     local();
+    kakao();
 };

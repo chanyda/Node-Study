@@ -62,6 +62,10 @@ app.use("/", pageRouter);
 app.use("/auth", authRouter);
 
 app.use((req: Request, res: Response, next: NextFunction) => {
+    if (req.url === "/favicon.ico") {
+        return;
+    }
+
     const error = new Error(`${req.method} ${req.url} Not Found Router`);
     error.status = 404;
     next(error);

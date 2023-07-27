@@ -46,7 +46,6 @@ export const join = async (req: Request, res: Response, next: NextFunction) => {
 
 export const login = (req: Request, res: Response, next: NextFunction) => {
     try {
-        console.log("Login Controller");
         passport.authenticate("local", (authError: any, user: User, info: any) => {
             // 만일 서버오류가 발생한 경우
             if (authError) {
@@ -67,7 +66,7 @@ export const login = (req: Request, res: Response, next: NextFunction) => {
                 }
                 return res.redirect("/");
             });
-        })(req, res, next); // 미들웨어이므로, (req, res, next) 붙여야함.
+        })(req, res, next); // 미들웨어이므로, (req, res, next) 붙여야함. -> 미들웨어 확장 패턴 req,res,next를 코드 내부에서 사용하기 위해 확장패턴을 사용
     } catch (err: any) {
         console.error(err);
         next(err);
