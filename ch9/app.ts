@@ -7,6 +7,7 @@ import nunjucks from "nunjucks";
 import dotenv from "dotenv";
 import pageRouter from "./routes/page";
 import authRouter from "./routes/auth";
+import postRouter from "./routes/post";
 import db from "./models";
 import passport from "passport";
 import { passportConfig } from "./passport";
@@ -33,6 +34,8 @@ db.sequelize
 
 app.use(morgan("dev"));
 app.use(express.static(path.join(__dirname, "public")));
+// 프론트단에서 서버의 폴더에 접근하기 위해 설정 (img 경로로 uploads 폴더를 가져올 수 있음)
+app.use("/img", express.static(path.join(__dirname, "uploads")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.COOKIE_SECRET)); // 3. {connect.sid: 세션쿠키} 객체를 생성해준다.
@@ -60,6 +63,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 
 app.use("/", pageRouter);
 app.use("/auth", authRouter);
+app.use("/post", postRouter);
 
 app.use((req: Request, res: Response, next: NextFunction) => {
     if (req.url === "/favicon.ico") {

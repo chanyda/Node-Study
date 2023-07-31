@@ -1,7 +1,24 @@
 import { NextFunction, Request, Response } from "express";
+import Post from "../models/post";
+import User from "../models/user";
 
-export const renderMain = (req: Request, res: Response, next: NextFunction) => {
-    res.render("main", { title: "NodeBird", twits: [] });
+export const renderMain = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const posts = await Post.findAll({
+            include: [
+                {
+                    model: User,
+                    attributes: ["id", "nick"],
+                },
+            ],
+            order: [["created_at", "DESC"]],
+        });
+
+        res.render("main", { title: "NodeBird", twits: posts });
+    } catch (err: any) {
+        console.error(err);
+        next(err);
+    }
 };
 
 export const renderJoin = (req: Request, res: Response, next: NextFunction) => {

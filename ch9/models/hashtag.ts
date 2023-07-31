@@ -2,6 +2,9 @@ import { DataTypes, Model, Sequelize } from "sequelize";
 import Post from "./post";
 
 class Hashtag extends Model {
+    public readonly id: number;
+    public title: string;
+
     static initiate(sequelize: Sequelize) {
         Hashtag.init(
             {

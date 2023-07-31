@@ -1,8 +1,13 @@
-import { DataTypes, Model, Sequelize } from "sequelize";
+import { DataTypes, HasManyAddAssociationMixin, Model, Sequelize } from "sequelize";
 import User from "./user";
 import Hashtag from "./hashtag";
 
 class Post extends Model {
+    public readonly id: number;
+    public content: string;
+    public img: string;
+    public addHashtags: HasManyAddAssociationMixin<Hashtag[], number>;
+
     static initiate(sequelize: Sequelize) {
         Post.init(
             {
