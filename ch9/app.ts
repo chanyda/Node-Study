@@ -8,6 +8,7 @@ import dotenv from "dotenv";
 import pageRouter from "./routes/page";
 import authRouter from "./routes/auth";
 import postRouter from "./routes/post";
+import userRouter from "./routes/user";
 import db from "./models";
 import passport from "passport";
 import { passportConfig } from "./passport";
@@ -54,23 +55,28 @@ app.use(passport.initialize()); // req.user, req.login, req.isAuthenticate, req.
 app.use(passport.session()); // 2. connect.sid라는 이름의 세션 쿠키가 브라우저로 전송 (브라우저 connect.sid=세션쿠키)
 
 app.use((req: Request, res: Response, next: NextFunction) => {
+    if (!req.user) {
+        return next();
+    }
+
     res.locals.user = req.user;
-    res.locals.followerCount = 0;
-    res.locals.followingCount = 0;
-    res.locals.followingIdList = [];
+    res.locals.followerCount = req.user.followers?.length ?? 0;
+    res.locals.followingCount = req.user.followings?.length ?? 0;
+    res.locals.followingIdList = req.user.followings?.map((following) => following.id) ?? [];
     next();
 });
 
 app.use("/", pageRouter);
 app.use("/auth", authRouter);
 app.use("/post", postRouter);
+app.use("/user", userRouter);
 
 app.use((req: Request, res: Response, next: NextFunction) => {
     if (req.url === "/favicon.ico") {
         return;
     }
 
-    const error = new Error(`${req.method} ${req.url} Not Found Router`);
+    const error: any = new Error(`${req.method} ${req.url} Not Found Router`);
     error.status = 404;
     next(error);
 });

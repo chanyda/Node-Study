@@ -22,7 +22,17 @@
 //   }
 // }
 
-const dbConfig = {
+interface IDbConfig {
+    development: {
+        username: string;
+        password: string;
+        database: string;
+        host: string;
+        [key: string]: string;
+    };
+}
+
+const dbConfig: IDbConfig = {
     development: {
         username: "root",
         password: "chany0000",

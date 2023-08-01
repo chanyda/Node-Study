@@ -4,7 +4,6 @@ import { local } from "./localStrategy";
 import { kakao } from "./kakaoStrategy";
 
 export const passportConfig = () => {
-    console.log("passport index.ts");
     // 로그인 시  실행 -> req.session 객체에 어떤 데이터를 저장할지 정하는 메소드
     passport.serializeUser((user, done) => {
         console.log("passport index.ts -> serializeUser");
@@ -17,7 +16,24 @@ export const passportConfig = () => {
     // 5. 유저아이디를 통해 User 정보를 찾는다.
     passport.deserializeUser(async (id, done) => {
         try {
-            const user = await User.findOne({ where: { id } });
+            const user = await User.findOne({
+                where: { id },
+                include: [
+                    // 팔로잉
+                    {
+                        model: User,
+                        as: "followings",
+                        attributes: ["id", "nick"],
+                    },
+                    // 팔로워
+                    {
+                        model: User,
+                        as: "followers",
+                        attributes: ["id", "nick"],
+                    },
+                ],
+            });
+
             if (!user) {
                 throw new Error("User not exists.");
             }
