@@ -30,6 +30,8 @@
             <div class="twit-author">{{twit.User.nick}}</div>
             {% if not followingIdList.includes(twit.User.id) and twit.User.id !== user.id %}
             <button class="twit-follow">팔로우하기</button>
+            {% endif %} {% if twit.User.id === user.id %}
+            <button class="post-delete">삭제하기</button>
             {% endif %}
             <div class="twit-content">{{twit.content}}</div>
             {% if twit.img %}
@@ -76,6 +78,26 @@
                                 console.error(err);
                             });
                     }
+                }
+            }
+        });
+    });
+
+    // 게시글 삭제
+    document.querySelectorAll(".post-delete").forEach((tag) => {
+        tag.addEventListener("click", () => {
+            const twitId = tag.parentNode.querySelector(".twit-id").value;
+
+            if (twitId) {
+                if (confirm("게시글을 삭제하시겠습니까?")) {
+                    axios
+                        .delete(`/post/${twitId}`)
+                        .then(() => {
+                            location.reload();
+                        })
+                        .catch((err) => {
+                            console.error(err);
+                        });
                 }
             }
         });

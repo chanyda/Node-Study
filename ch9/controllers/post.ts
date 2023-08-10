@@ -51,3 +51,28 @@ export const uploadPost = async (req: Request, res: Response, next: NextFunction
         next(err);
     }
 };
+
+export const deletePost = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const post = await Post.findOne({
+            where: {
+                id: req.params.id,
+            },
+        });
+
+        if (!post) {
+            return res.status(404).send("Not found post.");
+        }
+
+        if (post.dataValues.UserId !== req.user?.id) {
+            return res.status(403).json(null);
+        }
+
+        await post.destroy();
+
+        res.status(201).json("Success");
+    } catch (err: any) {
+        console.error(err);
+        next(err);
+    }
+};

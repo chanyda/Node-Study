@@ -2,7 +2,7 @@ import express from "express";
 import { isLoggedIn } from "../middlewares";
 import fs from "fs";
 import { uploadImageMiddleware } from "../middlewares/upload";
-import { uploadImage, uploadPost } from "../controllers/post";
+import { deletePost, uploadImage, uploadPost } from "../controllers/post";
 import multer from "multer";
 
 const router = express.Router();
@@ -17,5 +17,6 @@ try {
 
 router.post("/", isLoggedIn, multer().none(), uploadPost);
 router.post("/img", isLoggedIn, uploadImageMiddleware, uploadImage);
+router.delete("/:id", isLoggedIn, deletePost);
 
 export default router;

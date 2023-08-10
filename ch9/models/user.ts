@@ -1,4 +1,4 @@
-import { DataTypes, HasManyAddAssociationMixin, Model, Sequelize } from "sequelize";
+import { DataTypes, HasManyAddAssociationMixin, HasManyRemoveAssociationMixin, Model, Sequelize } from "sequelize";
 import Post from "./post";
 
 type ProviderType = "local" | "kakao";
@@ -11,6 +11,7 @@ class User extends Model {
     public provider: ProviderType;
     public sns_id: string;
     public addFollowing: HasManyAddAssociationMixin<User, number>;
+    public removeFollowing: HasManyRemoveAssociationMixin<User, number>;
 
     static initiate(sequelize: Sequelize) {
         User.init(

@@ -21,3 +21,24 @@ export const follow = async (req: Request, res: Response, next: NextFunction) =>
         next(err);
     }
 };
+
+export const unfollow = async (req: Request, res: Response, next: NextFunction) => {
+    try {
+        const user = await User.findOne({
+            where: {
+                id: req.user?.id,
+            },
+        });
+
+        if (!user) {
+            return res.status(404).send("Not found user.");
+        }
+
+        await user.removeFollowing(parseInt(req.params.id));
+
+        res.status(201).send("Success");
+    } catch (err: any) {
+        console.error(err);
+        next(err);
+    }
+};

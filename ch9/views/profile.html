@@ -1,16 +1,42 @@
 {% extends 'layout.html' %} {% block content %}
 <div class="timeline">
-    <div class="followings half">
+    <div class="follow-list half">
         <h2>팔로잉 목록</h2>
         {% if user.followings %} {% for following in user.followings %}
-        <div>{{following.nick}}</div>
+        <div class="following">
+            <input type="hidden" value="{{following.id}}" class="following-id" />
+            <div>{{following.nick}}</div>
+            <button class="unfollow">팔로잉 끊기</button>
+        </div>
         {% endfor %} {% endif %}
     </div>
-    <div class="followers half">
+    <div class="follow-list half">
         <h2>팔로워 목록</h2>
         {% if user.followers %} {% for follower in user.followers %}
         <div>{{follower.nick}}</div>
         {% endfor %} {% endif %}
     </div>
 </div>
+{% endblock %} {% block script %}
+<script>
+    // 팔로잉 끊기
+    document.querySelectorAll(".unfollow").forEach((tag) => {
+        tag.addEventListener("click", () => {
+            const followingId = tag.parentNode.querySelector(".following-id").value;
+
+            if (followingId) {
+                if (confirm("팔로우를 끊으시겠습니까?")) {
+                    axios
+                        .delete(`/user/${followingId}/unfollow`)
+                        .then(() => {
+                            location.reload();
+                        })
+                        .catch((err) => {
+                            console.error(err);
+                        });
+                }
+            }
+        });
+    });
+</script>
 {% endblock %}

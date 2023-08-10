@@ -1,0 +1,28 @@
+* {
+    box-sizing: border-box;
+}
+html,
+body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+.follow-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+.following {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+.unfollow {
+    padding: 1px 5px;
+    background: #fff;
+    border: 1px solid silver;
+    border-radius: 5px;
+    color: red;
+    font-size: 12px;
+    cursor: pointer;
+}
