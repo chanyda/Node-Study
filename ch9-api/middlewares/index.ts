@@ -21,6 +21,14 @@ export const isNotLoggedIn = (req: Request, res: Response, next: NextFunction) =
 
 export const verifyToken = (req: Request, res: Response, next: NextFunction) => {
     try {
+        if (!req.headers?.authorization) {
+            throw new Error("authorization not found.");
+        }
+
+        if (!process.env.JWT_SECRET) {
+            throw new Error("env not setting.");
+        }
+
         res.locals.decoded = jwt.verify(req.headers.authorization, process.env.JWT_SECRET);
         return next();
     } catch (err: any) {

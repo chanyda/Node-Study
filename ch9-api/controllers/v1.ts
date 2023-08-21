@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import Domain from "../models/domain";
 import User from "../models/user";
 import jwt from "jsonwebtoken";
+import Post from "../models/post";
+import Hashtag from "../models/hashtag";
 
 export const createToken = async (req: Request, res: Response, next: NextFunction) => {
     try {
@@ -67,5 +69,50 @@ export const tokenTest = (req: Request, res: Response, next: NextFunction) => {
         res.json(res.locals.decoded);
     } catch (err: any) {
         console.error(err);
+    }
+};
+
+export const getMyPosts = (req: Request, res: Response) => {
+    Post.findAll({
+        where: {
+            user_id: res.locals.decoded.id,
+        },
+    })
+        .then((posts) => {
+            console.log("posts", posts);
+            res.json({
+                code: 200,
+                payload: posts,
+            });
+        })
+        .catch((err) => {
+            return res.status(500).json({
+                code: 500,
+                message: "Server Error!",
+            });
+        });
+};
+
+export const getPostsByHashtag = async (req: Request, res: Response) => {
+    try {
+        const hashtag = await Hashtag.findOne({
+            where: {
+                title: req.params.title,
+            },
+        });
+
+        if (!hashtag) {
+            return res.status(404).json({ code: 404, message: "Not Found Hashtag." });
+        }
+
+        const posts = await hashtag.getPosts();
+        if (posts.length === 0) {
+            return res.status(404).json({ code: 404, message: "Not Found Posts." });
+        }
+
+        return res.json({ code: 200, payload: posts });
+    } catch (err: any) {
+        console.error(err);
+        return res.status(500).json({ code: 500, message: "Server Error!" });
     }
 };
