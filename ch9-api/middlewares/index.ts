@@ -57,9 +57,9 @@ const limiter = rateLimit({
         }
         return 10;
     },
-    handler(req: Request, res: Response) {
-        res.status(res.statusCode).json({
-            code: res.statusCode,
+    handler(_: Request, _res: Response) {
+        _res.status(this.statusCode).json({
+            code: this.statusCode,
             message: "사용 횟수를 초과했습니다.",
         });
     },
