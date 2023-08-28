@@ -8,6 +8,7 @@ import dotenv from "dotenv";
 import authRouter from "./routes/auth";
 import indexRouter from "./routes/index";
 import v1Router from "./routes/v1";
+import v2Router from "./routes/v2";
 import db from "./models";
 import passport from "passport";
 import { passportConfig } from "./passport";
@@ -66,6 +67,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
 app.use("/", indexRouter);
 app.use("/auth", authRouter);
 app.use("/v1", v1Router);
+app.use("/v2", v2Router);
 
 app.use((req: Request, res: Response, next: NextFunction) => {
     if (req.url === "/favicon.ico") {

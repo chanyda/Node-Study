@@ -11,6 +11,7 @@ class User extends Model {
     public password: string;
     public provider: ProviderType;
     public sns_id: string;
+    public type: "premium" | "normal";
     public addFollowing: HasManyAddAssociationMixin<User, number>;
     public removeFollowing: HasManyRemoveAssociationMixin<User, number>;
 

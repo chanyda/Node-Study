@@ -60,7 +60,7 @@ const request = async (req: Request, api: any) => {
             return request(req, api);
         }
 
-        throw err.response;
+        return err.response;
     }
 };
 
